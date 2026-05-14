@@ -1,6 +1,6 @@
 ---
 name: md2html
-description: Biến file Markdown (plan, spec, system design, RFC, runbook) thành HTML trực quan, single-file, có sơ đồ Mermaid, step cards, callouts, TOC. Theme Claude orange light+dark. Portable cross-AI.
+description: Convert long-form Markdown (plan, spec, system design, RFC, runbook, postmortem, brainstorm, notes) into a single self-contained HTML page with Mermaid diagrams, step timelines, callouts, sidebar TOC. Claude-orange light+dark theme. Multi-language. Portable across Claude Code / Codex / Antigravity / any AI agent.
 trigger: /md2html
 ---
 
@@ -61,7 +61,7 @@ Do this analysis silently in your head (or as one short summary line to the user
 
 - **Title** — from first H1 or filename. Title should be ≤ 80 chars.
 - **Subtitle** — first paragraph after H1, or the document's TL;DR sentence. ≤ 200 chars.
-- **Doc type** — infer one of: `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `NOTES`. The uppercase code in the eyebrow stays universal; the topbar `BRAND_LABEL` localizes (Plan / Kế hoạch).
+- **Doc type** — infer one of: `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `BRAINSTORM`, `NOTES`. Pick the closest match based on the document's *purpose*, not its filename. Brainstorm = exploring options with rationale; Plan = ordered steps to a goal; Spec = exact behavior contract; System design = architecture + tradeoffs; RFC = proposal seeking feedback; Runbook = operational procedure; Postmortem = incident review. The uppercase code in the eyebrow stays universal; the topbar `BRAND_LABEL` localizes (Plan / Kế hoạch / 计划 / etc).
 - **Reading time** — words ÷ 250, round to nearest minute. Format: `~N min read` (EN) or `~N phút đọc` (VI).
 - **Section map** — walk each H2/H3 and tag with the BEST component using §11 cheatsheet in `components.md`:
   - numbered action list → Timeline
@@ -81,7 +81,7 @@ Do this analysis silently in your head (or as one short summary line to the user
    - `{{REC_LABEL}}` → text shown on the "Recommended" comparison-card badge, e.g. `★ Recommended` / `★ Đề xuất` / `★ 推荐` / `★ 추천`. Sets the `--rec-label` CSS variable on `<html>`. If you forget this, CSS falls back to `★ Recommended`.
    - `{{TITLE}}` (appears twice: `<title>` and `.doc-title`)
    - `{{SUBTITLE}}`
-   - `{{DOC_TYPE}}` → universal uppercase code (`PLAN`, `SPEC`, `RFC`, …)
+   - `{{DOC_TYPE}}` → universal uppercase code: `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `BRAINSTORM`, `NOTES`
    - `{{SOURCE_FILE}}` → basename of source (e.g. `plan.md`)
    - `{{DATE}}` → ISO date or localized "Updated <today>"
    - `{{READ_TIME}}` → localized reading time, e.g. `~3 min read` / `~3 phút đọc` / `~3 分钟阅读`

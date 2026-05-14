@@ -38,6 +38,7 @@ The HTML's `<html lang="...">` attribute MUST be set to match the source languag
 | Brand — SPEC       | Spec                | Đặc tả              | 规格              | 仕様                | 사양                | Especificación       | Spécification         | Spezifikation       |
 | Brand — SYSTEM DESIGN | System Design    | Thiết kế hệ thống   | 系统设计          | システム設計        | 시스템 설계         | Diseño de sistema    | Conception système    | Systemdesign        |
 | Brand — RFC / RUNBOOK / POSTMORTEM | (keep) | (keep)            | (keep)            | (keep)              | (keep)              | (keep)               | (keep)                | (keep)              |
+| Brand — BRAINSTORM | Brainstorm          | Ý tưởng             | 头脑风暴          | ブレスト            | 브레인스토밍        | Lluvia de ideas      | Brainstorming         | Brainstorming       |
 | Brand — NOTES      | Notes               | Ghi chú             | 笔记              | メモ                | 메모                | Notas                | Notes                 | Notizen             |
 
 ### Default callout titles (override with source-specific phrases when possible)

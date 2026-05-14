@@ -1,7 +1,7 @@
 # md2html
 
-> **AI writes plans. md2html turns them into docs people actually read.**
-> A portable skill for Claude Code, Codex, Antigravity — or any AI agent — that turns a wall of Markdown into a single, self-contained HTML page with a sidebar TOC, Mermaid diagrams, step timelines, callouts, and a light/dark Claude-orange theme.
+> **Your AI writes docs. md2html turns them into pages people actually read.**
+> A portable skill for Claude Code, Codex, Antigravity — or any AI agent — that turns long-form Markdown (plans, specs, system designs, RFCs, runbooks, postmortems, brainstorms, notes) into a single self-contained HTML page with sidebar TOC, Mermaid diagrams, step timelines, callouts, comparison cards, and a light/dark Claude-orange theme.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-D97757.svg)](LICENSE)
 [![Zero install](https://img.shields.io/badge/install-zero%20deps-success.svg)](#install)
@@ -15,11 +15,21 @@
 
 ## The problem
 
-Your AI just produced 2,000 words of system design. Beautiful logic, careful tradeoffs, three architecture options compared — and you can't bring yourself to read past section 2 because it's a monospace wall of text in a terminal scrollback. Nobody on the team will click your "plan.md" link either.
+Your AI just produced 2,000 words of system design. Beautiful logic, careful tradeoffs, three architecture options compared — and you can't bring yourself to read past section 2 because it's a monospace wall of text in a terminal scrollback. Same goes for the brainstorm doc you asked it for last week, the migration plan from this morning, the postmortem draft you've been ignoring. Nobody on the team will click your `plan.md` link either.
 
 ## What this skill does
 
-You type `/md2html plan.md`. Your agent reads `plan.md`, opens `template.html` + `components.md` from this repo, and writes one polished HTML file next to the source. No build step, no server, no Node, no Python.
+You type `/md2html anydoc.md`. Your agent reads the file, opens `template.html` + `components.md` from this repo, and writes one polished HTML file next to the source. No build step, no server, no Node, no Python.
+
+Works on anything long-form your AI hands you:
+
+- **Plans** — multi-week roadmaps, migration steps, rollout strategies
+- **Specs** — feature specs, API specs, data-model designs
+- **System designs** — architecture docs, RFC-style proposals
+- **Runbooks** — operational procedures, incident response steps
+- **Postmortems** — incident reviews with timeline + root cause + action items
+- **Brainstorms** — option lists with rationale, idea dumps to organize
+- **Notes** — meeting notes, research summaries, anything else markdown
 
 It's not a Markdown-to-HTML converter. **It's an analyzer.** The agent decides which sections become Mermaid diagrams, which become numbered step cards, which become pros-cons tables, which become collapsible "deep dive" panels. The result feels designed, not converted.
 
