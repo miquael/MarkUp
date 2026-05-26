@@ -643,18 +643,62 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
       margin: 24px 0;
       box-shadow: var(--shadow-sm);
-      overflow-x: auto;
+      overflow: hidden;
+    }
+    .diagram-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .diagram-toolbar .icon-btn {
+      width: 34px;
+      height: 34px;
+      background: var(--surface);
+    }
+    .diagram-toolbar .icon-btn .icon {
+      width: 16px;
+      height: 16px;
+    }
+    .diagram-viewport {
+      overflow: auto;
+      padding: 24px;
+      max-height: 70vh;
+      overscroll-behavior: contain;
+    }
+    .diagram-canvas {
+      display: inline-block;
+      min-width: 100%;
+      transform-origin: top left;
+      transition: transform 0.15s ease;
+    }
+    .diagram.expanded {
+      position: fixed;
+      inset: 24px;
+      z-index: 400;
+      margin: 0;
+      background: var(--surface);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    .diagram.expanded .diagram-viewport {
+      flex: 1;
+      max-height: none;
     }
     .diagram-caption {
-      margin-top: 12px;
-      padding-top: 12px;
+      margin: 0;
+      padding: 12px 16px;
       border-top: 1px dashed var(--border);
       font-size: 13px;
       color: var(--text-subtle);
       text-align: center;
+      background: var(--surface);
     }
     .mermaid { text-align: center; min-height: 80px; }
     .mermaid svg { max-width: 100%; height: auto; }
@@ -1064,11 +1108,14 @@
        PRINT
        ============================================================ */
     @media print {
-      .topbar, .toc, .toc-backdrop, .icon-btn, .copy-btn, .anchor, .scroll-progress { display: none !important; }
+      .topbar, .toc, .toc-backdrop, .icon-btn, .copy-btn, .anchor, .scroll-progress, .diagram-toolbar { display: none !important; }
       .layout { grid-template-columns: 1fr; padding: 0; max-width: 100%; }
       body { background: #fff; color: #000; }
       a { color: #000; }
       .content pre, .callout, .compare-card, .step, .diagram { break-inside: avoid; }
+      .diagram { overflow: visible; box-shadow: none; }
+      .diagram-viewport { overflow: visible; padding: 0; max-height: none; }
+      .diagram-canvas { transform: none !important; }
       .doc-footer { break-before: avoid; }
     }
   </style>
@@ -1100,6 +1147,11 @@
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="i-zoom-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></symbol>
+    <symbol id="i-zoom-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+    <symbol id="i-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></symbol>
   </svg>
 
   <!-- Topbar -->
@@ -1203,13 +1255,25 @@
       <div class="risk-register"><article class="risk-item"><div><h4>Incomplete observability</h4><p>Mitigation: block launch until the health dashboard has traffic, error, and latency panels.</p></div><div class="risk-meta"><span class="risk-pill medium">Likelihood: medium</span><span class="risk-pill high">Impact: high</span></div></article><article class="risk-item"><div><h4>Unexpected load during launch</h4><p>Mitigation: cap rollout at 50% until the queue remains stable for one hour.</p></div><div class="risk-meta"><span class="risk-pill low">Likelihood: low</span><span class="risk-pill medium">Impact: medium</span></div></article><article class="risk-item"><div><h4>Stale handoff notes</h4><p>Mitigation: assign a documentation owner for the launch window.</p></div><div class="risk-meta"><span class="risk-pill medium">Likelihood: medium</span><span class="risk-pill low">Impact: low</span></div></article></div>
 
       <h2 id="diagrams">Diagrams</h2>
-      <figure class="diagram"><pre class="mermaid">
-flowchart LR
+      <figure class="diagram">
+      <div class="diagram-toolbar" aria-label="Diagram controls">
+        <button class="icon-btn" type="button" data-diagram-action="zoom-in" title="Zoom in" aria-label="Zoom in"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zoom-in"/></svg></button>
+        <button class="icon-btn" type="button" data-diagram-action="zoom-out" title="Zoom out" aria-label="Zoom out"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zoom-out"/></svg></button>
+        <button class="icon-btn" type="button" data-diagram-action="reset" title="Reset" aria-label="Reset"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reset"/></svg></button>
+        <button class="icon-btn" type="button" data-diagram-action="expand" title="Expand" aria-label="Expand"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-expand"/></svg></button>
+      </div>
+      <div class="diagram-viewport">
+        <div class="diagram-canvas" data-scale="1">
+          <pre class="mermaid">flowchart LR
   Product[Product UI] --> API(Launch API)
   API --> Queue[/Rollout queue/]
   Queue --> Worker(Worker)
   Worker --> Analytics[(Warehouse)]
-      </pre><figcaption class="diagram-caption">Launch event flow from product surface to analytics.</figcaption></figure>
+      </pre>
+        </div>
+      </div>
+      <figcaption class="diagram-caption">Launch event flow from product surface to analytics.</figcaption>
+    </figure>
 
       <h2 id="timeline">Timeline</h2>
       <div class="timeline"><article class="step done"><div class="step-num">1</div><div class="step-body"><h3>Prepare checklist</h3><p>Confirm owners, dashboards, and rollback commands.</p></div></article><article class="step"><div class="step-num">2</div><div class="step-body"><h3>Enable staff-only access</h3><p>Run final smoke tests with production data.</p></div></article><article class="step"><div class="step-num">3</div><div class="step-body"><h3>Roll out to 5%</h3><p>Watch errors, latency, and support tickets for 30 minutes.</p></div></article><article class="step"><div class="step-num">4</div><div class="step-body"><h3>Roll out to 50%</h3><p>Continue monitoring with support on standby.</p></div></article><article class="step"><div class="step-num">5</div><div class="step-body"><h3>Complete rollout</h3><p>Publish the release note and close the launch room.</p></div></article></div>
@@ -1277,6 +1341,37 @@ flowchart LR
       });
       try { await mermaid.run({ nodes: els }); } catch (e) { console.error(e); }
     }
+    function setupDiagramControls() {
+      document.querySelectorAll(".diagram").forEach((figure) => {
+        const canvas = figure.querySelector(".diagram-canvas");
+        if (!canvas) return;
+        const expandUse = figure.querySelector("[data-diagram-action='expand'] use");
+        const applyScale = (next) => {
+          const scale = Math.min(2.5, Math.max(0.6, next));
+          canvas.dataset.scale = scale.toFixed(2);
+          canvas.style.transform = `scale(${scale})`;
+          const overflow = Math.max(0, scale - 1) * 100;
+          canvas.style.marginRight = `${overflow}%`;
+          canvas.style.marginBottom = `${overflow}%`;
+        };
+        applyScale(Number(canvas.dataset.scale) || 1);
+        figure.querySelectorAll("[data-diagram-action]").forEach((button) => {
+          if (button.dataset.bound === "true") return;
+          button.dataset.bound = "true";
+          button.addEventListener("click", () => {
+            const current = Number(canvas.dataset.scale) || 1;
+            const action = button.dataset.diagramAction;
+            if (action === "zoom-in") applyScale(current + 0.2);
+            if (action === "zoom-out") applyScale(current - 0.2);
+            if (action === "reset") applyScale(1);
+            if (action === "expand") {
+              figure.classList.toggle("expanded");
+              if (expandUse) expandUse.setAttribute("href", figure.classList.contains("expanded") ? "#i-shrink" : "#i-expand");
+            }
+          });
+        });
+      });
+    }
     function toggleTheme() {
       const next = currentTheme() === "light" ? "dark" : "light";
       document.documentElement.dataset.theme = next;
@@ -1290,6 +1385,13 @@ flowchart LR
     function closeToc() { document.body.classList.remove("toc-open"); }
     document.addEventListener("keydown", e => {
       if (e.key === "Escape" && document.body.classList.contains("toc-open")) closeToc();
+      if (e.key === "Escape") {
+        document.querySelectorAll(".diagram.expanded").forEach((figure) => {
+          figure.classList.remove("expanded");
+          const use = figure.querySelector("[data-diagram-action='expand'] use");
+          if (use) use.setAttribute("href", "#i-expand");
+        });
+      }
     });
 
     // ---------- TOC scrollspy ----------
@@ -1379,6 +1481,7 @@ flowchart LR
       applyThemeIcon();
       injectAnchors();
       injectCopyButtons();
+      setupDiagramControls();
       renderMermaid();
       setupTocSpy();
       setupScrollProgress();

@@ -191,18 +191,38 @@ Use diagrams for flows with three or more hops, state machines, entity relations
 
 ```html
 <figure class="diagram">
-  <pre class="mermaid">
+  <div class="diagram-toolbar" aria-label="Diagram controls">
+    <button class="icon-btn" type="button" data-diagram-action="zoom-in" title="Zoom in" aria-label="Zoom in">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zoom-in"/></svg>
+    </button>
+    <button class="icon-btn" type="button" data-diagram-action="zoom-out" title="Zoom out" aria-label="Zoom out">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zoom-out"/></svg>
+    </button>
+    <button class="icon-btn" type="button" data-diagram-action="reset" title="Reset" aria-label="Reset">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reset"/></svg>
+    </button>
+    <button class="icon-btn" type="button" data-diagram-action="expand" title="Expand" aria-label="Expand">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-expand"/></svg>
+    </button>
+  </div>
+  <div class="diagram-viewport">
+    <div class="diagram-canvas" data-scale="1">
+      <pre class="mermaid">
 flowchart LR
   Client --> Gateway
   Gateway --> Worker
   Worker --> DB[(Postgres)]
   Worker --> Queue[/Event bus/]
-  </pre>
+      </pre>
+    </div>
+  </div>
   <figcaption class="diagram-caption">Request flow from client to worker and persistence layers.</figcaption>
 </figure>
 ```
 
 Prefer `flowchart LR`, `flowchart TD`, `sequenceDiagram`, `erDiagram`, `stateDiagram-v2`, or `gantt`.
+
+Use this full wrapper for every Mermaid diagram. The toolbar lets readers zoom, reset, and expand dense diagrams without changing the source Mermaid.
 
 ## 8. Pros / Cons
 
