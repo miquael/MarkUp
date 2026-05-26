@@ -35,6 +35,32 @@ The output is a single portable `.html` file. Styling and scripts are embedded. 
 - Copy buttons on code blocks
 - WCAG-conscious contrast, focus states, and reduced-motion handling
 
+## Install
+
+### Claude Code
+
+```bash
+git clone https://github.com/miquael/MarkUp ~/.claude/skills/markup
+```
+
+Reload your session and run:
+
+```bash
+/markup plan.md
+```
+
+Outputs `plan.html` next to the source.
+
+### Codex CLI
+
+```bash
+git clone https://github.com/miquael/MarkUp ~/.config/markup
+mkdir -p ~/.codex/prompts
+ln -s ~/.config/markup/SKILL.md ~/.codex/prompts/markup.md
+```
+
+Codex's prompts directory has shifted across versions; adjust the symlink target if needed.
+
 ## Usage
 
 ```bash
@@ -108,9 +134,7 @@ Theme tokens live at the top of `template.html`:
 ## Roadmap
 
 - Add optional offline Mermaid bundling
-- Add more example documents
 - Add richer table variants
-- Improve RTL layout if multilingual support returns later
 
 ## License
 
