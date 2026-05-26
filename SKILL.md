@@ -144,7 +144,7 @@ The only external dependency is Mermaid via CDN at HTML open time. Fonts are loa
 ## Edge Cases
 
 - **Source has no headings** - create one `<h2 id="content">Content</h2>` and infer logical breaks.
-- **Source has existing Mermaid blocks** - keep them and wrap in `<figure class="diagram">`.
+- **Source has existing Mermaid blocks** - keep the Mermaid source and wrap it with the full diagram toolbar, viewport, canvas, and caption structure from `components.md`.
 - **Source has embedded HTML** - pass through if safe, otherwise escape.
 - **Source is very short** - skip the sidebar contents and render a single column if the TOC would be empty.
 - **Source is very long** - collapse low-priority appendices with `<details>`.
