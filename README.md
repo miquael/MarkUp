@@ -107,3 +107,7 @@ Theme tokens live at the top of `template.html`:
 ## License
 
 MIT.
+
+## Attribution
+
+MarkUp is extended from [haidang1810/md2html](https://github.com/haidang1810/md2html).
