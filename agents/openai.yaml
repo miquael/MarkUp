@@ -1,0 +1,7 @@
+interface:
+  display_name: "markup"
+  short_description: "Convert Markdown docs into self-contained MarkUp HTML pages"
+  default_prompt: "Use $markup to convert a Markdown document into a self-contained MarkUp HTML page."
+
+policy:
+  allow_implicit_invocation: true
