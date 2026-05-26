@@ -51,6 +51,7 @@ The output is written next to the source unless `--out` is provided.
 | Numeric targets or outcomes | Metric grid |
 | Criteria-based choice | Decision matrix |
 | Risks and mitigations | Risk register |
+| Draft, accepted, blocked, deprecated state | Status badges |
 | Critical conclusion | Key-point highlight |
 | Warnings, decisions, tips | Callouts |
 | Long appendix or FAQ | Collapsible section |

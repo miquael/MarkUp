@@ -158,7 +158,23 @@ Use callouts for important context, warnings, decisions, confirmations, and tips
 </aside>
 ```
 
-## 5. Key-Point Highlight
+## 5. Status Badges
+
+Use for document state, feature state, rollout state, and lightweight labels.
+
+```html
+<div class="status-row">
+  <span class="status-badge draft">Draft</span>
+  <span class="status-badge proposed">Proposed</span>
+  <span class="status-badge accepted">Accepted</span>
+  <span class="status-badge blocked">Blocked</span>
+  <span class="status-badge deprecated">Deprecated</span>
+</div>
+```
+
+Use only short labels. For explanatory text, use a callout or paragraph.
+
+## 6. Key-Point Highlight
 
 Use sparingly for the most important conclusion in a section.
 
@@ -169,7 +185,7 @@ Use sparingly for the most important conclusion in a section.
 </div>
 ```
 
-## 6. Mermaid Diagram
+## 7. Mermaid Diagram
 
 Use diagrams for flows with three or more hops, state machines, entity relationships, sequence diagrams, or roadmaps.
 
@@ -188,7 +204,7 @@ flowchart LR
 
 Prefer `flowchart LR`, `flowchart TD`, `sequenceDiagram`, `erDiagram`, `stateDiagram-v2`, or `gantt`.
 
-## 7. Pros / Cons
+## 8. Pros / Cons
 
 Use for trade-off sections.
 
@@ -211,7 +227,7 @@ Use for trade-off sections.
 </div>
 ```
 
-## 8. Comparison Cards
+## 9. Comparison Cards
 
 Use for two or more options.
 
@@ -234,7 +250,7 @@ Use for two or more options.
 
 Put the recommended option first.
 
-## 9. Metric Grid
+## 10. Metric Grid
 
 Use for measurable targets, baselines, outcomes, and postmortem impact summaries.
 
@@ -258,7 +274,7 @@ Use for measurable targets, baselines, outcomes, and postmortem impact summaries
 </div>
 ```
 
-## 10. Decision Matrix
+## 11. Decision Matrix
 
 Use when criteria matter more than prose comparison.
 
@@ -297,7 +313,7 @@ Use when criteria matter more than prose comparison.
 </div>
 ```
 
-## 11. Risk Register
+## 12. Risk Register
 
 Use for risks, likelihood, impact, and mitigation.
 
@@ -326,7 +342,7 @@ Use for risks, likelihood, impact, and mitigation.
 </div>
 ```
 
-## 12. Collapsible Section
+## 13. Collapsible Section
 
 Use for optional deep dives, appendices, long code blocks, rejected options, or FAQ content.
 
@@ -340,7 +356,7 @@ Use for optional deep dives, appendices, long code blocks, rejected options, or 
 </details>
 ```
 
-## 13. Plain HTML Elements
+## 14. Plain HTML Elements
 
 These render correctly with the template CSS:
 
@@ -359,7 +375,7 @@ These render correctly with the template CSS:
 
 Do not use `<h1>` in body content. The template title is already the page H1.
 
-## 14. Component Selection Cheatsheet
+## 15. Component Selection Cheatsheet
 
 | Source pattern | Component |
 |---|---|
@@ -370,6 +386,7 @@ Do not use `<h1>` in body content. The template title is already the page H1.
 | Numeric targets or impact summary | Metric grid |
 | Weighted criteria or scoring | Decision matrix |
 | Risks, likelihood, impact, mitigation | Risk register |
+| Draft, accepted, blocked, deprecated, rollout state | Status badges |
 | Critical conclusion | Key-point highlight |
 | Context, note, background | Info callout |
 | Risk, gotcha, caution | Warning callout |
@@ -380,7 +397,7 @@ Do not use `<h1>` in body content. The template title is already the page H1.
 | Long appendix, FAQ, rejected options | Collapsible |
 | Four or more columns or long cells | Table wrapper |
 
-## 15. Icon Sprite Catalog
+## 16. Icon Sprite Catalog
 
 `template.html` defines these icon IDs. Reference them as:
 
@@ -409,7 +426,7 @@ Do not use `<h1>` in body content. The template title is already the page H1.
 | `#i-check` | Copied state |
 | `#i-link` | Heading permalink |
 
-## 16. Edge-Case Patterns
+## 17. Edge-Case Patterns
 
 ### Images
 
@@ -458,7 +475,7 @@ Wrap tables with four or more columns, or tables with long cells.
 </ol>
 ```
 
-## 17. Anti-Patterns
+## 18. Anti-Patterns
 
 - Do not use emoji icons.
 - Do not wrap every paragraph in callouts.

@@ -57,6 +57,7 @@ Use these component heuristics:
 | Numeric targets or impact summary | Metric grid |
 | Weighted criteria or scoring | Decision matrix |
 | Risks, likelihood, impact, mitigation | Risk register |
+| Draft, accepted, blocked, deprecated, rollout state | Status badges |
 | Critical conclusion | Key-point highlight |
 | Context, note, background | Info callout |
 | Risk, gotcha, caution | Warning callout |

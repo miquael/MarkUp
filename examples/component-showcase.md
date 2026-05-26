@@ -6,6 +6,10 @@ This example demonstrates the visual building blocks available in MarkUp. It use
 
 The operations team tracks launch readiness with a compact summary of reliability, adoption, and remaining work.
 
+## Status Badges
+
+Status badges show compact document, feature, or rollout state without adding full callout weight.
+
 ## Callouts
 
 Use callouts for context, warnings, destructive actions, completed checks, decisions, tips, and security notes.
@@ -47,4 +51,3 @@ The launch checklist tracks owner, status, due date, and escalation path.
 ## Collapsible Details
 
 The rejected big-bang rollout plan is kept as an appendix for context.
-
