@@ -1,154 +1,154 @@
 ---
-name: md2html
-description: Convert long-form Markdown (plan, spec, system design, RFC, runbook, postmortem, brainstorm, notes) into a single self-contained HTML page with Mermaid diagrams, step timelines, callouts, sidebar TOC. Claude-orange light+dark theme. Multi-language. Portable across Claude Code / Codex / Antigravity / any AI agent.
-trigger: /md2html
+name: markup
+description: Convert long-form English Markdown into a single portable MarkUp HTML page with Mermaid diagrams, timelines, callouts, comparison cards, metrics, decision matrices, risk registers, sidebar contents, and a blue dark-default theme.
+trigger: /markup
 ---
 
-# /md2html
+# /markup
 
-Convert a verbose Markdown document into a single, self-contained HTML file that a tired human can actually scan: diagrams instead of paragraphs, step cards instead of numbered lists, callouts for the parts that matter.
+Convert a verbose English Markdown document into a single, self-contained HTML file that is easy to scan: diagrams instead of dense flow prose, step cards instead of rollout lists, callouts for the parts that matter, and structured components for metrics, decisions, and risks.
 
 ## Usage
 
 ```
-/md2html <file.md>             # output <file>.html next to source
-/md2html <file.md> --out X.html # custom output path
-/md2html                       # if no arg, ask user which file
+/markup <file.md>             # output <file>.html next to source
+/markup <file.md> --out X.html # custom output path
+/markup                       # if no arg, ask user which file
 ```
 
-## Skill files (resolved relative to this SKILL.md)
+## Skill files
 
-- `template.html`   — HTML skeleton with embedded CSS (Claude orange light+dark), Mermaid CDN, theme toggle, TOC sidebar, footer. Contains `{{PLACEHOLDER}}` strings and `<!-- COMMENT -->` slots.
-- `components.md`  — catalog of HTML snippets you must copy verbatim (step cards, callouts, mermaid blocks, pros-cons, comparison cards, collapsibles).
-- `examples/`     — at least one reference `<doc>.md` → `<doc>.html` pair. Read one to calibrate output quality before starting.
+Resolve these files relative to this `SKILL.md`:
 
-**You MUST read all three before writing output.** Do not invent CSS classes or skip the catalog.
+- `template.html` - HTML skeleton with embedded CSS, Mermaid CDN, theme toggle, sidebar contents, footer, placeholders, and content slots.
+- `components.md` - HTML component catalog for timelines, callouts, diagrams, pros/cons, comparison cards, metrics, decision matrices, risk registers, collapsibles, tables, images, task lists, and footnotes.
+- `examples/` - reference Markdown and HTML outputs.
 
-## What you must do when invoked
+Read all three before writing output. Do not invent CSS classes or skip the catalog.
 
-Follow these steps in order. Do not skip.
+## Conversion Steps
 
-### Step 1 — Resolve inputs
+### Step 1 - Resolve Inputs
 
-1. Determine the source file from the user's invocation. If none given, ask: *"Tệp `.md` nào cần convert?"* and stop.
+1. Determine the source file from the invocation. If none is provided, ask: "Which `.md` file should I convert?" and stop.
 2. Read the source `.md` fully.
-3. Read `template.html` and `components.md` from the same directory as this SKILL.md.
-4. Read one example pair under `examples/` to calibrate.
+3. Read `template.html` and `components.md`.
+4. Read at least one example pair under `examples/` to calibrate output quality.
 
-### Step 2 — Analyze the source document
+### Step 2 - Analyze The Source
 
-Do this analysis silently in your head (or as one short summary line to the user). Identify:
+Identify:
 
-- **Language of the source** — detect from the actual prose, not the filename. Set `<html lang="...">` to the ISO 639-1 code (`en`, `vi`, `zh`, `ja`, `ko`, `es`, `fr`, `de`, `ru`, `ar`, `th`, …) and translate every UI label to that language.
+- **Title** - first H1, or the filename. Keep it at or below 80 characters when possible.
+- **Subtitle** - first paragraph after the H1, or the document's clearest summary sentence. Keep it at or below 200 characters.
+- **Doc type** - infer one of `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `BRAINSTORM`, `NOTES`.
+- **Brand label** - title-case version of the doc type, such as `Plan`, `Spec`, `System Design`, `RFC`, `Runbook`, `Postmortem`, `Brainstorm`, or `Notes`.
+- **Reading time** - words divided by 250, rounded to the nearest minute. Format as `~N min read`.
+- **Section map** - walk each H2/H3 and pick the best component from `components.md`.
 
-  Common samples (extend to any language using the same scheme):
+Use these component heuristics:
 
-  | Key            | EN                 | VI                 | ZH (中文)           | JA (日本語)         | KO (한국어)         | ES (Español)        |
-  |---             |---                 |---                 |---                  |---                  |---                  |---                  |
-  | TOC title      | Contents           | Mục lục            | 目录                | 目次                | 목차                | Contenido           |
-  | Read-time      | ~N min read        | ~N phút đọc        | ~N 分钟阅读         | ~N 分で読了         | ~N분 소요           | ~N min de lectura   |
-  | Recommended    | ★ Recommended      | ★ Đề xuất          | ★ 推荐              | ★ 推奨              | ★ 추천              | ★ Recomendado       |
-  | Key point      | Key point          | Ý chính            | 要点                | 要点                | 핵심                | Idea clave          |
-  | Pros           | ✓ Pros             | ✓ Ưu điểm          | ✓ 优点              | ✓ 長所              | ✓ 장점              | ✓ Ventajas          |
-  | Cons           | ✕ Cons             | ✕ Nhược điểm       | ✕ 缺点              | ✕ 短所              | ✕ 단점              | ✕ Desventajas       |
-  | Print tooltip  | Print / Save PDF   | In / Lưu PDF       | 打印 / 保存 PDF     | 印刷 / PDF 保存     | 인쇄 / PDF 저장     | Imprimir / Guardar  |
-  | Theme tooltip  | Toggle theme       | Đổi theme          | 切换主题            | テーマ切替          | 테마 전환           | Cambiar tema        |
-  | Source: prefix | Source:            | Nguồn:             | 来源:               | ソース:             | 소스:               | Fuente:             |
+| Source pattern | Component |
+|---|---|
+| Ordered rollout, action items, migration steps | Timeline |
+| Architecture flow with three or more hops | Mermaid diagram |
+| Pros, cons, trade-offs | Pros / Cons |
+| Option A vs B vs C | Comparison cards |
+| Numeric targets or impact summary | Metric grid |
+| Weighted criteria or scoring | Decision matrix |
+| Risks, likelihood, impact, mitigation | Risk register |
+| Critical conclusion | Key-point highlight |
+| Context, note, background | Info callout |
+| Risk, gotcha, caution | Warning callout |
+| Blocker, destructive action, must-not-do | Danger callout |
+| Completed work or verified result | Success callout |
+| Chosen path or ADR | Decision callout |
+| Recommendation or best practice | Tip callout |
+| Long appendix, FAQ, rejected options | Collapsible |
+| Four or more columns or long cells | Table wrapper |
 
-  For any language not listed, translate using the same conventions. The "Recommended" badge is configured via the `--rec-label` CSS variable set on `<html>` (no per-language CSS needed) — see `{{REC_LABEL}}` below.
+### Step 3 - Build The Output HTML
 
-  **RTL languages** (Arabic, Hebrew, Persian) — current template is LTR-only. If source is RTL, also add `dir="rtl"` to `<html>` and consider it a known visual limitation (sidebar will stay on the left).
-
-- **Title** — from first H1 or filename. Title should be ≤ 80 chars.
-- **Subtitle** — first paragraph after H1, or the document's TL;DR sentence. ≤ 200 chars.
-- **Doc type** — infer one of: `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `BRAINSTORM`, `NOTES`. Pick the closest match based on the document's *purpose*, not its filename. Brainstorm = exploring options with rationale; Plan = ordered steps to a goal; Spec = exact behavior contract; System design = architecture + tradeoffs; RFC = proposal seeking feedback; Runbook = operational procedure; Postmortem = incident review. The uppercase code in the eyebrow stays universal; the topbar `BRAND_LABEL` localizes (Plan / Kế hoạch / 计划 / etc).
-- **Reading time** — words ÷ 250, round to nearest minute. Format: `~N min read` (EN) or `~N phút đọc` (VI).
-- **Section map** — walk each H2/H3 and tag with the BEST component using §11 cheatsheet in `components.md`:
-  - numbered action list → Timeline
-  - architecture/flow prose → Mermaid
-  - "ưu/nhược", "pros/cons" → Pros-Cons
-  - "option A vs B" → Comparison cards
-  - critical conclusion → Key-point highlight
-  - warnings/decisions → Callouts
-  - long appendix → Collapsible
-  - everything else → plain `<h2>` + `<p>`
-
-### Step 3 — Build the output HTML
-
-1. **Copy** the full `template.html` content into a string. Do NOT use Read-then-Edit on a file you haven't created; instead, build the output buffer in memory then `Write` once.
-2. **Replace placeholders** in the template (all values come from Step 2 analysis, language-matched):
-   - `{{LANG}}` → ISO 639-1 code: `en` / `vi` / `zh` / `ja` / `ko` / `es` / …
-   - `{{REC_LABEL}}` → text shown on the "Recommended" comparison-card badge, e.g. `★ Recommended` / `★ Đề xuất` / `★ 推荐` / `★ 추천`. Sets the `--rec-label` CSS variable on `<html>`. If you forget this, CSS falls back to `★ Recommended`.
-   - `{{TITLE}}` (appears twice: `<title>` and `.doc-title`)
+1. Copy the full `template.html` content into an output buffer.
+2. Replace placeholders:
+   - `{{REC_LABEL}}` -> `Recommended`
+   - `{{TITLE}}`
    - `{{SUBTITLE}}`
-   - `{{DOC_TYPE}}` → universal uppercase code: `PLAN`, `SPEC`, `SYSTEM DESIGN`, `RFC`, `RUNBOOK`, `POSTMORTEM`, `BRAINSTORM`, `NOTES`
-   - `{{SOURCE_FILE}}` → basename of source (e.g. `plan.md`)
-   - `{{DATE}}` → ISO date or localized "Updated <today>"
-   - `{{READ_TIME}}` → localized reading time, e.g. `~3 min read` / `~3 phút đọc` / `~3 分钟阅读`
-   - `{{BRAND_LABEL}}` → localized doc-type label for the topbar
-   - `{{TOC_TITLE}}` → localized "Contents" (also used as `aria-label` for the TOC drawer)
-   - `{{PRINT_TOOLTIP}}` → localized print tooltip
-   - `{{THEME_TOOLTIP}}` → localized theme-toggle tooltip
-   - `{{CLOSE_LABEL}}` → localized "Close" (used for the mobile TOC drawer close button), e.g. `Close` / `Đóng` / `关闭` / `閉じる`
-   - `{{SKIP_LINK_LABEL}}` → localized skip-to-content link text, e.g. `Skip to content` / `Bỏ qua menu` / `跳到正文`
-   - `{{FOOTER_NOTE}}` → localized source attribution (e.g. `Source: plan.md` / `Nguồn: plan.md` / `来源: plan.md`)
-3. **Replace `<!-- TOC_ENTRIES -->`** with one `<a>` per H2/H3 (see §2 in components.md). Generate stable kebab-case `id` from heading text.
-4. **Replace the slot between `<!-- CONTENT_START -->` and `<!-- CONTENT_END -->`** with the document body, section by section, using components from `components.md`. Each section must:
-   - Start with `<h2 id="..."> ` (matching the TOC entry).
-   - Use ONE primary component per logical chunk (don't stack 3 callouts in a row).
-   - Preserve original meaning — do not summarize away technical detail; condense only filler/repetition.
-5. **Write** the assembled HTML to the output path.
+   - `{{DOC_TYPE}}`
+   - `{{SOURCE_FILE}}`
+   - `{{DATE}}` -> ISO date or `Updated <date>`
+   - `{{READ_TIME}}`
+   - `{{BRAND_LABEL}}`
+   - `{{TOC_TITLE}}` -> `Contents`
+   - `{{PRINT_TOOLTIP}}` -> `Print / Save PDF`
+   - `{{THEME_TOOLTIP}}` -> `Toggle theme`
+   - `{{CLOSE_LABEL}}` -> `Close`
+   - `{{SKIP_LINK_LABEL}}` -> `Skip to content`
+   - `{{FOOTER_NOTE}}` -> `Source: <source basename>`
+3. Replace `<!-- TOC_ENTRIES -->` with one link per H2/H3.
+4. Replace the slot between `<!-- CONTENT_START -->` and `<!-- CONTENT_END -->` with the document body.
+5. Write the assembled HTML to the output path.
 
-### Step 4 — Verify
+Each section should:
 
-After writing, do ONE quick sanity check by re-reading just the section you generated (not the whole file):
-- Every `id="..."` referenced in the TOC exists on a heading.
+- Start with `<h2 id="...">` matching the TOC entry.
+- Use one primary component per logical chunk.
+- Preserve technical detail and exact identifiers.
+- Avoid adding information not present in the source.
+
+### Step 4 - Verify
+
+After writing, run a quick sanity check:
+
+- Every TOC `href` points to an existing heading `id`.
 - No leftover `{{PLACEHOLDER}}` strings.
-- Mermaid blocks have valid syntax (use `flowchart`, `sequenceDiagram`, `erDiagram`, `stateDiagram-v2`, or `gantt` — never bare `graph` without direction).
-- No `<script>` tags added beyond what `template.html` already includes.
+- Mermaid blocks use valid forms such as `flowchart`, `sequenceDiagram`, `erDiagram`, `stateDiagram-v2`, or `gantt`.
+- No `<script>` tags were added beyond the scripts already in `template.html`.
+- The document is English-only unless the source contains proper nouns, code identifiers, filenames, commands, or URLs.
 
-Report back to the user with:
-- Output file path
-- 1-line summary of what changed (e.g. *"Rendered 7 sections: 1 mermaid flow, 2 step timelines, 4 callouts. ~6 phút đọc."*)
-- A reminder they can open it with `xdg-open <file>.html` (Linux) / `open <file>.html` (mac).
+Report:
 
-## Critical rules
+- Output file path.
+- One-line rendering summary, such as: "Rendered 8 sections: 1 Mermaid flow, 1 timeline, 2 callouts, 1 risk register. ~6 min read."
+- A reminder that the user can open it with `open <file>.html` on macOS or `xdg-open <file>.html` on Linux.
 
-1. **Never paraphrase technical content into vague prose.** A step `chạy migration 0042_user_schema.sql` must remain that exact filename — don't change to `chạy migration mới`.
-2. **One component per chunk.** Don't wrap a callout inside a step card inside a collapsible. Keep nesting flat.
-3. **Mermaid > prose for any flow ≥ 3 hops.** If the source says "A gọi B, B gọi C, C ghi DB", make a diagram.
-4. **Key-point highlights are rare.** Max 1 per H2 section, ideally 2-3 total per document.
-5. **UI text follows the detected source language** — including for non-EN/non-VI sources (Chinese, Japanese, Korean, Spanish, etc). Use the language sample table in Step 2 or translate equivalently. Code, commands, file names, library names, error messages stay verbatim regardless of language.
-6. **Self-contained output.** No external file references except the CDN scripts already in `template.html`.
-7. **Do not modify `template.html` or `components.md`** — those are the skill's source of truth. Only Write the output `.html`.
-8. **Use SVG icons only — never emojis.** Every icon is `<svg class="..."><use href="#i-NAME"/></svg>` referencing the sprite at the top of `<body>`. See §13 in `components.md` for the catalog. No emoji glyphs anywhere in callouts, doc-meta, topbar, or body content.
-9. **Anchor links and copy-to-clipboard auto-inject via JS** — do NOT add them manually. Just give H2/H3 a proper `id`, and put code in `<pre><code>`. The template's boot script handles the rest.
-10. **Wrap wide tables in `.table-wrap`** — see components.md §14b. Tables ≥ 4 columns or with long cells need the wrapper for mobile scroll.
-11. **Use `<figure>` + `<figcaption>` for images** with descriptive `alt`. See components.md §14a.
+## Critical Rules
 
-## Cross-AI compatibility
+1. Preserve exact technical content. Do not turn `0042_user_schema.sql` into `the new migration`.
+2. Keep components flat. Do not nest callouts inside timelines inside collapsibles.
+3. Use Mermaid for any flow with three or more meaningful hops.
+4. Use key-point highlights sparingly.
+5. UI is English only.
+6. Output is portable. Do not add external file references beyond the CDN scripts already in `template.html`.
+7. Do not modify `template.html` or `components.md` while converting a user document. Those files are MarkUp's source of truth.
+8. Use SVG icons from the template sprite. Do not use emoji icons.
+9. Anchor links and copy-to-clipboard buttons are injected by the template script. Do not add them manually.
+10. Wrap wide tables in `.table-wrap`.
+11. Use `<figure>` and `<figcaption>` for images with descriptive `alt` text.
 
-This skill is designed to run identically on:
+## Cross-Agent Compatibility
 
-- **Claude Code** — install at `~/.claude/skills/md2html/` (this directory, symlinked or copied). Invoke with `/md2html <file>`.
-- **Codex CLI** — copy `SKILL.md` content to `~/.codex/prompts/md2html.md`, keep `template.html` and `components.md` at a stable absolute path, update the file references in SKILL.md if needed. Invoke with `/md2html`.
-- **Antigravity** — add SKILL.md as a custom prompt/agent instruction, ensure the agent has Read/Write tool access to the skill folder.
+MarkUp is designed to work in any AI agent that can read and write local files:
 
-The only external dependency is `mermaid` via CDN (resolved at HTML open time, not at skill execution time). No npm/pip install required for the skill itself.
+- Claude Code - install this directory as a skill and invoke `/markup <file>`.
+- Codex CLI - make this prompt available to Codex and keep `template.html` and `components.md` at a stable path.
+- Other agents - paste this file into the agent instructions and grant access to this directory.
 
-## Edge cases
+The only external dependency is Mermaid via CDN at HTML open time. Fonts are loaded from Google Fonts. No package install is required for generation.
 
-- **Source has no headings** — wrap content in one `<h2 id="content">Nội dung</h2>` and infer logical breaks from blank lines + topic shifts.
-- **Source has existing mermaid code blocks** — keep them, just rewrap in `<figure class="diagram">` with caption.
-- **Source has HTML embedded** — pass through as-is inside `<div>` if safe, else escape.
-- **Source is very short (< 200 words)** — skip TOC sidebar (delete `<aside class="toc">` block), render as single column.
-- **Source is very long (> 5000 words)** — collapse low-priority sections by default with `<details>`.
-- **Output file already exists** — overwrite. The source `.md` is canonical; HTML is regenerated artifact.
+## Edge Cases
 
-## Anti-patterns
+- **Source has no headings** - create one `<h2 id="content">Content</h2>` and infer logical breaks.
+- **Source has existing Mermaid blocks** - keep them and wrap in `<figure class="diagram">`.
+- **Source has embedded HTML** - pass through if safe, otherwise escape.
+- **Source is very short** - skip the sidebar contents and render a single column if the TOC would be empty.
+- **Source is very long** - collapse low-priority appendices with `<details>`.
+- **Output file already exists** - overwrite it. The Markdown source is canonical.
 
-- ❌ Generating the HTML in many small Edit calls — produces drift. Build full string, Write once.
-- ❌ Adding new CSS via `<style>` — extend `template.html` instead and tell the user.
-- ❌ Translating proper nouns or code identifiers.
-- ❌ "Improving" the source by adding info not in the original.
-- ❌ Reporting success without running Step 4 verification.
+## Anti-Patterns
+
+- Generating HTML through many small edits.
+- Adding generated-only CSS via `<style>`.
+- Translating, rewriting, or smoothing away technical identifiers.
+- Adding facts not present in the source.
+- Reporting success without verification.
