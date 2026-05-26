@@ -4,6 +4,11 @@ MarkUp turns long-form English Markdown into portable HTML pages that people can
 
 It is not a generic Markdown converter. It is an AI-agent skill: the agent reads the source document, chooses the right visual components, and writes one self-contained HTML file.
 
+<p align="center">
+  <img src="docs/preview-light.png" alt="MarkUp light theme preview" width="49%" />
+  <img src="docs/preview-dark.png" alt="MarkUp dark theme preview" width="49%" />
+</p>
+
 ## What It Does
 
 Use MarkUp for:
@@ -113,4 +118,4 @@ MIT.
 
 ## Attribution
 
-MarkUp is extended from [haidang1810/md2html](https://github.com/haidang1810/md2html).
+[MarkUp](https://github.com/miquael/MarkUp) is extended from [haidang1810/md2html](https://github.com/haidang1810/md2html).
