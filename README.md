@@ -61,11 +61,13 @@ The output is written next to the source unless `--out` is provided.
 
 See:
 
+- [`examples/example-plan.md`](examples/example-plan.md) -> [`examples/example-plan.html`](examples/example-plan.html)
+- [`examples/technical-spec.md`](examples/technical-spec.md) -> [`examples/technical-spec.html`](examples/technical-spec.html)
 - [`examples/architecture-rfc.md`](examples/architecture-rfc.md) -> [`examples/architecture-rfc.html`](examples/architecture-rfc.html)
 - [`examples/incident-postmortem.md`](examples/incident-postmortem.md) -> [`examples/incident-postmortem.html`](examples/incident-postmortem.html)
 - [`examples/component-showcase.md`](examples/component-showcase.md) -> [`examples/component-showcase.html`](examples/component-showcase.html)
 
-Together these examples cover the current and new component set.
+`example-plan` is the default compact reference pair. The other examples are optional references for technical specs, RFCs, postmortems, and component-heavy layouts.
 
 ## Project Files
 

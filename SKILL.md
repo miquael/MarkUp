@@ -22,9 +22,13 @@ Resolve these files relative to this `SKILL.md`:
 
 - `template.html` - HTML skeleton with embedded CSS, Mermaid CDN, theme toggle, sidebar contents, footer, placeholders, and content slots.
 - `components.md` - HTML component catalog for timelines, callouts, diagrams, pros/cons, comparison cards, metrics, decision matrices, risk registers, collapsibles, tables, images, task lists, and footnotes.
-- `examples/` - reference Markdown and HTML outputs.
+- `examples/example-plan.md` and `examples/example-plan.html` - default reference pair. Read this pair before converting.
+- `examples/technical-spec.md` and `examples/technical-spec.html` - optional reference for specifications, steering docs, implementation notes, and research-to-build reports.
+- `examples/architecture-rfc.md` and `examples/architecture-rfc.html` - optional reference for architecture proposals and trade-off discussions.
+- `examples/incident-postmortem.md` and `examples/incident-postmortem.html` - optional reference for incidents, timelines, and corrective actions.
+- `examples/component-showcase.md` and `examples/component-showcase.html` - optional visual reference for component-heavy layouts.
 
-Read all three before writing output. Do not invent CSS classes or skip the catalog.
+Read `template.html`, `components.md`, and the default example pair before writing output. Do not invent CSS classes or skip the catalog.
 
 ## Conversion Steps
 
@@ -33,7 +37,7 @@ Read all three before writing output. Do not invent CSS classes or skip the cata
 1. Determine the source file from the invocation. If none is provided, ask: "Which `.md` file should I convert?" and stop.
 2. Read the source `.md` fully.
 3. Read `template.html` and `components.md`.
-4. Read at least one example pair under `examples/` to calibrate output quality.
+4. Read `examples/example-plan.md` and `examples/example-plan.html` to calibrate output quality. If the source resembles a technical spec, RFC, postmortem, or component-heavy showcase, optionally read the relevant additional example.
 
 ### Step 2 - Analyze The Source
 
